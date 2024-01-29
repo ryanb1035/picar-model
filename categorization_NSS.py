@@ -10,11 +10,16 @@ from sklearn.cluster import DBSCAN
 from picar import front_wheels, back_wheels
 import picar
 
-# picamera setup
+
+# Setting up the PiCamera with specific resolution settings.
+# 'h' is the length of the resolution, and the resolution is adjusted
+# to meet PiCamera's aspect ratio requirements.
+# An empty data array is preallocated for storing the captured images.
 h = 640 #largest resolution length
 cam_res = (int(h),int(0.75*h)) # resizing to picamera's required ratios
 cam_res = (int(32*np.floor(cam_res[0]/32)),int(16*np.floor(cam_res[1]/16)))
 cam = PiCamera(resolution=cam_res)
+# Capturing an image from the PiCamera and storing it in the 'data' array.
 # preallocating image variables
 data = np.empty((cam_res[1],cam_res[0],3),dtype=np.uint8)
 
@@ -31,6 +36,7 @@ data = data[100:300, 100:500, 0:3]
 fig2,ax2 = plt.subplots(1,1,figsize=(12,8))
 ax2.imshow(data)
  
+# Applying a Gaussian filter to the image for edge detection, and creating a grid for the image data.
 scale_val = 0.25
 min_samps = 20
 leaf_sz = 15
@@ -39,7 +45,8 @@ gaus = scimg.fourier_gaussian(scimg.zoom(np.mean(data,2),scale_val),sigma=0.01)
 x,y = np.meshgrid(np.arange(0,np.shape(data)[1],1/scale_val),
                   np.arange(0,np.shape(data)[0],1/scale_val))
 
-# Canny method without angle  
+# The Canny edge detection method is used without angle to detect edges.
+# A histogram of edge intensities is created to identify significant edges. 
 can_x = scimg.prewitt(gaus,axis=0)
 can_y = scimg.prewitt(gaus,axis=1)
 can = np.hypot(can_x,can_y)
@@ -64,6 +71,8 @@ for ii,jj in zip(x_cluster,y_cluster):
     scat_pts.append((ii,jj))
    
 # clustering analysis for object detection
+# Using DBSCAN clustering algorithm to identify clusters of edge points.
+# These clusters help in detecting distinct objects in the image.
 clustering = DBSCAN(eps=max_dxdy,min_samples=min_samps,
                     algorithm='ball_tree',
                     leaf_size=leaf_sz).fit(scat_pts)
@@ -72,6 +81,7 @@ nn_time = time.time()-t1
 stimulus_strength_dict = {}
 
 # looping through each individual object
+# Analyzing each detected object. Objects too close to the image edge are ignored.
 for ii in np.unique(clustering.labels_):    
     if ii==-1:
         continue
@@ -87,12 +97,14 @@ for ii in np.unique(clustering.labels_):
     ax[1].plot(x_pts,y_pts,marker='.',linestyle='',
                label='Unrotated Scatter')
     # rotation algorithm
+    # Rotating the coordinate system for better object representation.
     evals,evecs = np.linalg.eigh(np.cov(x_pts,y_pts))
     angle = np.arctan(evecs[0][1]/evecs[0][0])
     # print(str((angle/np.pi)*180))
     rot_vec = np.matmul(evecs.T,[x_pts,y_pts])
    
     # rectangle algorithms
+    # Calculating bounding rectangles for each object and annotating them on the image.
     if angle<0:
         rect_origin = (np.matmul(evecs,[np.min(rot_vec[0]),np.max(rot_vec[1])]))
     else:
@@ -109,6 +121,7 @@ for ii in np.unique(clustering.labels_):
                  bbox=dict(fc='white'))
    
     # stuff i added
+    # Calculating object's area and storing it with its x-coordinate in a dictionary.
     radius = (rect_width + rect_height) / 4
     area = np.pi * np.square(radius)
     stimulus_strength_dict[int(rect_origin[0])] = area # key = x coordinate, value = area 
@@ -123,6 +136,7 @@ fig2.savefig('rectangles_over_real_image.png',dpi=200,facecolor=[252/255,252/255
 
 
 # model implementation
+# Setting constants for the attentional model.
 # constants
 r_out = 0.01
 r_in = 0.8
@@ -143,6 +157,7 @@ L50 = 11.6
 inhibition_tminus1 = m
 predifference = 1
 
+# Implementing a loop to simulate dynamic inhibitory activity over time.
 while predifference > 0.05:
     # dependent on inhibition_tminus1_2
     i_in = r_in * inhibition_tminus1
@@ -163,6 +178,7 @@ inhibition_t0_1 = inhibition_t0
 inhibition_t0_2 = inhibition_t0
 
 # stimulus strengths
+# Processing the strength of stimuli based on the detected objects.
 stimulus_strength = []
 
 # leftmost stimulus
@@ -195,6 +211,7 @@ print('stimulus strength 2: {0}'.format(stimulus_2))
 
 fano_factor = 0.25
 
+# Simulating the effect of each stimulus on the attentional model.
 for k in range(101):
     # dependent on inhibition_t0_2
     i_in_1 = r_in * inhibition_t0_2
@@ -232,12 +249,14 @@ for k in range(101):
 print('final excitatory unit 1 activity: {0}'.format(OT_t1_1))
 print('final excitatory unit 2 activity: {0}'.format(OT_t1_2))
 
+# Setting up the PiCar for movement.
 # moving the robot towards the winning stimulus
 picar.setup()
 bw = back_wheels.Back_Wheels()
 fw = front_wheels.Front_Wheels()
 bw.speed = 0
-
+# Determining the direction of movement based on the dominant stimulus.
+# Moving the car towards the stronger stimulus.
 if OT_t1_1 > OT_t1_2: # stimulus on the left is bigger
     fw.turn(90 - 30)
     bw.speed = 30
