@@ -1,5 +1,5 @@
 import time
-from picamera import PiCamera
+#from picamera import PiCamera
 import scipy.ndimage as scimg
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,8 +7,8 @@ from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from sklearn.cluster import DBSCAN
 
-from picar import front_wheels, back_wheels
-import picar
+#from picar import front_wheels, back_wheels
+#import picar
 
 
 # Setting up the PiCamera with specific resolution settings.
@@ -18,7 +18,9 @@ import picar
 h = 640 #largest resolution length
 cam_res = (int(h),int(0.75*h)) # resizing to picamera's required ratios
 cam_res = (int(32*np.floor(cam_res[0]/32)),int(16*np.floor(cam_res[1]/16)))
+
 cam = PiCamera(resolution=cam_res)
+
 # Capturing an image from the PiCamera and storing it in the 'data' array.
 # preallocating image variables
 data = np.empty((cam_res[1],cam_res[0],3),dtype=np.uint8)
