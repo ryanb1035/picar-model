@@ -1,5 +1,5 @@
 import time
-#from picamera import PiCamera
+from picamera import PiCamera
 import scipy.ndimage as scimg
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,8 +7,8 @@ from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from sklearn.cluster import DBSCAN
 
-#from picar import front_wheels, back_wheels
-#import picar
+from picar import front_wheels, back_wheels
+import picar
 
 
 # Setting up the PiCamera with specific resolution settings.
