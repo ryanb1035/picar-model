@@ -25,15 +25,22 @@ vertical = C.create_line(width/2, 0, width/2, height)
 value = random.randint(50,400)
 left = C.create_oval(width/4-value, height/2-value, width/4+value, height/2+value, fill="black") 
 
+#Function to reset the circle and randomly change its size
 def display_stimulus():
+    #Simplest method I could figure out to "erase" the screen on the left side
+    #Draws a white rectangle over everything and redraws the horizontal line
     left = C.create_rectangle(0, 0, width/2, height, fill="white")
     horizontal = C.create_line(0, height/2, width, height/2)
+
+    #random value between 50 and 400 pixels that represents the radius of the new circle
     value = random.randint(50,400)
+
+    #creates a new circle with the generated value
     left = C.create_oval(width/4-value, height/2-value, width/4+value, height/2+value, fill="black") 
 
     print("The radius of the new circle is",value,"pixels")
 
-#Programming the button
+#Programming the button to call the above function every time it's pressed
 B = tkinter.Button(top, text ="reset", command=display_stimulus)
 B.place(x=0,y=0)
 
