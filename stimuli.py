@@ -1,3 +1,4 @@
+from time import sleep
 import tkinter
 import random
 
@@ -38,11 +39,23 @@ def display_stimulus():
     #creates a new circle with the generated value
     left = C.create_oval(width/4-value, height/2-value, width/4+value, height/2+value, fill="black") 
 
+    C.pack()
+
     print("The radius of the new circle is",value,"pixels")
 
 #Programming the button to call the above function every time it's pressed
 B = tkinter.Button(top, text ="reset", command=display_stimulus)
 B.place(x=0,y=0)
 
-C.pack()
+B.pack()
+display_stimulus()
 top.mainloop()
+
+#display_stimulus()
+#C.pack()
+#top.mainloop()
+
+#i = 0
+#while i == 0:
+#    sleep(1)
+#    B.invoke()
