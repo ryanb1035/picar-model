@@ -60,14 +60,14 @@ bw.speed = 0
 if position == "right":
     fw.turn(90+(math.abs(cx-image_center_x)))
     bw.speed = 30
-    for i in range(500):
+    for i in range(100):
         bw.backward()
     bw.stop()
     fw.turn(90)
 else:
     fw.turn(90-(math.abs(cx-image_center_x)))
     bw.speed = 30
-    for i in range(500):
+    for i in range(100):
         bw.backward()
     bw.stop()
     fw.turn(90)
