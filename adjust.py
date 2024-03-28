@@ -1,3 +1,4 @@
+import math
 from picar import front_wheels, back_wheels
 import picar
 from PIL import Image
