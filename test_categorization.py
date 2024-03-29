@@ -1,40 +1,38 @@
 import time
-from picamera import PiCamera
+#from picamera import PiCamera
 import scipy.ndimage as scimg
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from sklearn.cluster import DBSCAN
+import cv2
 
-from picar import front_wheels, back_wheels
-import picar
+#from picar import front_wheels, back_wheels
+#import picar
 
 
 # Setting up the PiCamera with specific resolution settings.
 # 'h' is the length of the resolution, and the resolution is adjusted
 # to meet PiCamera's aspect ratio requirements.
 # An empty data array is preallocated for storing the captured images.
-h = 640 #largest resolution length
-cam_res = (int(h),int(0.75*h)) # resizing to picamera's required ratios
-cam_res = (int(32*np.floor(cam_res[0]/32)),int(16*np.floor(cam_res[1]/16)))
+#h = 640 #largest resolution length
+#cam_res = (int(h),int(0.75*h)) # resizing to picamera's required ratios
+#cam_res = (int(32*np.floor(cam_res[0]/32)),int(16*np.floor(cam_res[1]/16)))
 
-cam = PiCamera(resolution=cam_res)
+#cam = PiCamera(resolution=cam_res)
 
 # Capturing an image from the PiCamera and storing it in the 'data' array.
 # preallocating image variables
-data = np.empty((cam_res[1],cam_res[0],3),dtype=np.uint8)
+#data = np.empty((cam_res[1],cam_res[0],3),dtype=np.uint8)
 
 # different edge detection methods
 fig,ax = plt.subplots(2,1,figsize=(10,6))
 t1 = time.time()
-cam.capture(data,'rgb') # capture image
+fig,ax = plt.subplots(2,1,figsize=(10,6))
+#cam.capture(data,'rgb') # capture image
 
-"""
-TODO: crop data appropriately
-"""
-data = data[100:300, 100:500, 0:3]
-
+data = cv2.imread("test.png")
 fig2,ax2 = plt.subplots(1,1,figsize=(12,8))
 ax2.imshow(data)
  
@@ -247,30 +245,5 @@ for k in range(101):
     inhibition_t0_1 = inhibition_t1_1
     inhibition_t0_2 = inhibition_t1_2
    
-   
 print('final excitatory unit 1 activity: {0}'.format(OT_t1_1))
 print('final excitatory unit 2 activity: {0}'.format(OT_t1_2))
-
-# Setting up the PiCar for movement.
-# moving the robot towards the winning stimulus
-picar.setup()
-bw = back_wheels.Back_Wheels()
-fw = front_wheels.Front_Wheels()
-bw.speed = 0
-# Determining the direction of movement based on the dominant stimulus.
-# Moving the car towards the stronger stimulus.
-if OT_t1_1 > OT_t1_2: # stimulus on the left is bigger
-    fw.turn(90 - 30)
-    bw.speed = 30
-    for i in range(500):
-        bw.backward()
-    bw.stop()
-    fw.turn(90)
-   
-else: # stimulus on the right is bigger
-    fw.turn(90 + 30)
-    bw.speed = 30
-    for i in range(500):
-        bw.backward()
-    bw.stop()
-    fw.turn(90)
