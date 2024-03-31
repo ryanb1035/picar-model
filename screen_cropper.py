@@ -2,11 +2,6 @@ import cv2
 import numpy as np
 from scipy import ndimage
 
-# Function to find the largest rectangle contour in the image
-def find_laptop_screen_contour(contours):
-    laptop_contour = max(contours, key=cv2.contourArea)
-    return laptop_contour
-
 # Load the image
 image = cv2.imread("test.png")
 
@@ -21,7 +16,7 @@ edges = cv2.Canny(blurred, 50, 150)
 contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 # Find the laptop screen contour
-laptop_screen_contour = find_laptop_screen_contour(contours)
+laptop_screen_contour = max(contours, key=cv2.contourArea)
 
 # Get the bounding rectangle for the laptop screen contour
 x, y, w, h = cv2.boundingRect(laptop_screen_contour)
