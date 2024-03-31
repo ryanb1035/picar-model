@@ -20,13 +20,12 @@ edges = cv2.Canny(blurred, 50, 150)
 
 # Find contours
 contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-print(contours)
 
 # Find the largest contour
 largest_contour = max(contours, key=cv2.contourArea)
 
 # Draw the largest contour on the original image
-cv2.drawContours(image, [largest_contour], -1, (0, 255, 0), 2)
+cv2.drawContours(image, contours[0:3], -1, (0, 255, 0), 2)
 
 # Save the resulting image
 result_image_path = 'result_test.png'
@@ -39,7 +38,7 @@ cv2.imwrite(result_image_path, image)
 """
 # Inputting contours into neural circuit
 """
-
+"""
 # model implementation
 # Setting constants for the attentional model.
 # constants
@@ -93,9 +92,9 @@ stimulus_strength.append(stimulus_strength_dict[temp])
 temp = max(stimulus_strength_dict)
 stimulus_strength.append(stimulus_strength_dict[temp])
 
-"""
+
 TODO: scale stimulus accordingly
-"""
+
 stimulus_strength[1] = stimulus_strength[1]/1200
 stimulus_strength[0] = stimulus_strength[0]/1200
 
@@ -103,13 +102,12 @@ stimulus_strength[0] = stimulus_strength[0]/1200
 stimulus_1 = stimulus_strength[0]
 stimulus_2 = stimulus_strength[1]
 
-"""
+
 for testing purposes
-"""
-"""
+
 stimulus_1 = 9
 stimulus_2 = 10
-"""
+
 
 print('stimulus strength 1: {0}'.format(stimulus_1))
 print('stimulus strength 2: {0}'.format(stimulus_2))
@@ -153,3 +151,4 @@ for k in range(101):
    
 print('final excitatory unit 1 activity: {0}'.format(OT_t1_1))
 print('final excitatory unit 2 activity: {0}'.format(OT_t1_2))
+"""
