@@ -19,8 +19,8 @@ C = tkinter.Canvas(top, bg="white", height=height, width=width)
 right = C.create_oval(width*3/4-200, height/2-200, width*3/4+200, height/2+200, fill='black')
 
 #Drawing lines for the robot to reorient itself
-horizontal = C.create_line(0, height/2, width, height/2)
-vertical = C.create_line(width/2, 0, width/2, height)
+#horizontal = C.create_line(0, height/2, width, height/2)
+#vertical = C.create_line(width/2, 0, width/2, height)
 
 #Drawing the circle that's supposed to change
 value = random.randint(50,400)
@@ -30,13 +30,15 @@ left = C.create_oval(width/4-value, height/2-value, width/4+value, height/2+valu
 def display_stimulus():
     #Simplest method I could figure out to "erase" the screen on the left side
     #Draws a white rectangle over everything and redraws the horizontal line
-    left = C.create_rectangle(0, 0, width/2, height, fill="white")
-    horizontal = C.create_line(0, height/2, width, height/2)
+    left = C.create_rectangle(0, 0, width, height, fill="white")
+
+    #horizontal = C.create_line(0, height/2, width, height/2)
 
     #random value between 50 and 400 pixels that represents the radius of the new circle
     value = random.randint(50,400)
 
     #creates a new circle with the generated value
+    right = C.create_oval(width*3/4-200, height/2-200, width*3/4+200, height/2+200, fill='black')
     left = C.create_oval(width/4-value, height/2-value, width/4+value, height/2+value, fill="black") 
 
     C.pack()
