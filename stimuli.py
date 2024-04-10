@@ -18,7 +18,7 @@ C = tkinter.Canvas(top, bg="white", height=height, width=width)
 #Drawing the circle that's supposed to stay constant
 right = C.create_oval(width*3/4-100, height/2-100, width*3/4+100, height/2+100, fill='black')
 
-middle = C.create_oval(width/2-10, height/2-10, width/2+10, height/2+10, fill='green2')
+middle = C.create_oval(width/2-20, height/2-20, width/2+20, height/2+20, fill='green2')
 
 #Drawing lines for the robot to reorient itself
 #horizontal = C.create_line(0, height/2, width, height/2)
