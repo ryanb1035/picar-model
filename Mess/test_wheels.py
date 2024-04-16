@@ -1,5 +1,5 @@
-from picar import front_wheels, back_wheels
-import picar
+from picar import front_wheels, back_wheels # type: ignore
+import picar # type: ignore
 import time
 
 picar.setup()

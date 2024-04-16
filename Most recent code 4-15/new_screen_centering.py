@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from picar import front_wheels, back_wheels
-from picamera2 import Picamera2, Preview
-import picar
+from picar import front_wheels, back_wheels # type: ignore
+from picamera2 import Picamera2, Preview # type: ignore
+import picar # type: ignore
 import time
 
 #camera = Picamera2()
