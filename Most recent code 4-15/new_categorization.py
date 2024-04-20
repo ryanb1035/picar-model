@@ -12,7 +12,7 @@ config = camera.create_still_configuration(main={"size": (3280,2464)}, lores={"s
 camera.start()
 
 camera.capture_file("test.png")
-image = cv2.imread("test.png")
+image = cv2.imread("test.png")[820:2460, 616:1848]
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (7,7), 0)
@@ -57,12 +57,12 @@ if len(stimuli) == 2:
 	#print("first", cv2.boundingRect(stimuli[0]))
 	x2,y2,w2,h2 = cv2.boundingRect(stimuli[1])
 	#print("second", cv2.boundingRect(stimuli[1]))
-	mask1 = np.zeros_like(image)
-	mask2 = np.zeros_like(image)
+	mask1 = np.zeros_like(image[:2])
+	mask2 = np.zeros_like(image[:2])
 
     # Draw the contours on the masks
 	cv2.drawContours(mask1, [stimuli[0]], -1, color=255, thickness=cv2.FILLED)
-	cv2.drawContours(mask2, [stimuli[2]], -1, color=255, thickness=cv2.FILLED)
+	cv2.drawContours(mask2, [stimuli[1]], -1, color=255, thickness=cv2.FILLED)
 
     # Calculate the mean intensity within each mask
 	mean_intensity1 = cv2.mean(image, mask=mask1)[0]

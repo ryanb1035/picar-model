@@ -1,4 +1,5 @@
 import paramiko
+import stimuli
 
 host = "192.168.0.5"
 username = "smlab-picar-dev"
