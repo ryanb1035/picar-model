@@ -54,15 +54,26 @@ print(len(stimuli))
 
 if len(stimuli) == 2:
 	x1,y1,w1,h1 = cv2.boundingRect(stimuli[0])
-	print("first", cv2.boundingRect(stimuli[0]))
+	#print("first", cv2.boundingRect(stimuli[0]))
 	x2,y2,w2,h2 = cv2.boundingRect(stimuli[1])
-	print("second", cv2.boundingRect(stimuli[1]))
+	#print("second", cv2.boundingRect(stimuli[1]))
+	mask1 = np.zeros_like(image)
+	mask2 = np.zeros_like(image)
+
+    # Draw the contours on the masks
+	cv2.drawContours(mask1, [stimuli[0]], -1, color=255, thickness=cv2.FILLED)
+	cv2.drawContours(mask2, [stimuli[2]], -1, color=255, thickness=cv2.FILLED)
+
+    # Calculate the mean intensity within each mask
+	mean_intensity1 = cv2.mean(image, mask=mask1)[0]
+	mean_intensity2 = cv2.mean(image, mask=mask2)[0]
+
 	if x1 < x2:
-		stimulus_1 = w1*w1
-		stimulus_2 = w2*h2
+		stimulus_1 = mean_intensity1
+		stimulus_2 = mean_intensity2
 	else:
-		stimulus_1 = w2*h2
-		stimulus_2 = w1*h1
+		stimulus_1 = mean_intensity2
+		stimulus_2 = mean_intensity1
 	temp = stimulus_1 + stimulus_2
 	stimulus_1 = stimulus_1/temp
 	stimulus_2 = stimulus_2/temp
