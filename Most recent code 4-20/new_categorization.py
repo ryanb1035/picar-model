@@ -9,10 +9,11 @@ import new_screen_centering
 
 camera = Picamera2()
 config = camera.create_still_configuration(main={"size": (3280,2464)}, lores={"size": (640,480)}, encode="lores")
+camera.configure(config)
 camera.start()
 
 camera.capture_file("test.png")
-image = cv2.imread("test.png")[820:2460, 616:1848]
+image = cv2.imread("test.png")#[820:2460, 616:1848]
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (7,7), 0)
@@ -24,26 +25,27 @@ contours = sorted(contours, key=cv2.contourArea)
 
 def is_circle(contour):
 	area = cv2.contourArea(contour)
-	if area < 300:
-		print("area")
+	if area < 60:
+		print("area:", area)
 		return False
 	perimiter = cv2.arcLength(contour, True)
 	if perimiter == 0:
 		return False
 	circularity = 4 * np.pi * (area / (perimiter * perimiter))
-	if circularity < 0.8:
-		print("circularity")
+	if circularity < 0.6:
+		print("circularity:", circularity)
 		return False
 	(x,y), (width, height), angle = cv2.minAreaRect(contour)
 	aspect_ratio = min(width, height) / max(width, height)
 	if aspect_ratio < 0.85:
-		print("ratio")
+		print("ratio:", ratio)
 		return False
-	print("passed")
+	print("passed:",area,perimiter,circularity)
 	return True
 
 stimuli = []
 for i in contours:
+	cv2.drawContours(image, i, -1, (0, 255, 0), 2)
 	if is_circle(i):
 		stimuli.append(i)
 		cv2.drawContours(image, i, -1, (0, 255, 0), 2)
@@ -53,20 +55,21 @@ print(len(stimuli))
 #cv2.imwrite("result.png", image)
 
 if len(stimuli) == 2:
+	img = image.astype(np.uint8)
 	x1,y1,w1,h1 = cv2.boundingRect(stimuli[0])
 	#print("first", cv2.boundingRect(stimuli[0]))
 	x2,y2,w2,h2 = cv2.boundingRect(stimuli[1])
 	#print("second", cv2.boundingRect(stimuli[1]))
-	mask1 = np.zeros_like(image[:2])
-	mask2 = np.zeros_like(image[:2])
+	mask1 = np.zeros_like(img[:2], dtype.uint8)
+	mask2 = np.zeros_like(img[:2], dtype.uint8)
 
     # Draw the contours on the masks
 	cv2.drawContours(mask1, [stimuli[0]], -1, color=255, thickness=cv2.FILLED)
 	cv2.drawContours(mask2, [stimuli[1]], -1, color=255, thickness=cv2.FILLED)
 
     # Calculate the mean intensity within each mask
-	mean_intensity1 = cv2.mean(image, mask=mask1)[0]
-	mean_intensity2 = cv2.mean(image, mask=mask2)[0]
+	mean_intensity1 = cv2.mean(img, mask=mask1)[0]
+	mean_intensity2 = cv2.mean(img, mask=mask2)[0]
 
 	if x1 < x2:
 		stimulus_1 = mean_intensity1
@@ -81,6 +84,8 @@ else:
 	stimulus_1 = 10
 	stimulus_2 = 9
 	
+
+
 print(stimulus_1, stimulus_2)
 
 cv2.imwrite("result.png", image)
@@ -244,5 +249,5 @@ else: # stimulus on the right is bigger
 
 sleep(1)
 
-while new_screen_centering.adjustPosition() != True:
-	camera.capture_file("test.png")
+#while new_screen_centering.adjustPosition() != True:
+#	camera.capture_file("test.png")
