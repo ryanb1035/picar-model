@@ -8,12 +8,12 @@ from time import sleep
 import new_screen_centering
 
 camera = Picamera2()
-config = camera.create_still_configuration(main={"size": (3280,2464)}, lores={"size": (640,480)}, encode="lores")
+config = camera.create_still_configuration(main={"size": (1280,960)}, lores={"size": (640,480)}, encode="lores")
 camera.configure(config)
 camera.start()
 
 camera.capture_file("test.png")
-image = cv2.imread("test.png")#[820:2460, 616:1848]
+image = cv2.imread("test.png", cv2.IMREAD_GRAYSCALE)#[820:2460, 616:1848]
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (7,7), 0)
@@ -25,7 +25,7 @@ contours = sorted(contours, key=cv2.contourArea)
 
 def is_circle(contour):
 	area = cv2.contourArea(contour)
-	if area < 60:
+	if area < 500:
 		print("area:", area)
 		return False
 	perimiter = cv2.arcLength(contour, True)
@@ -38,14 +38,14 @@ def is_circle(contour):
 	(x,y), (width, height), angle = cv2.minAreaRect(contour)
 	aspect_ratio = min(width, height) / max(width, height)
 	if aspect_ratio < 0.85:
-		print("ratio:", ratio)
+		print("ratio:", aspect_ratio)
 		return False
-	print("passed:",area,perimiter,circularity)
+	print("passed:",area,circularity,aspect_ratio)
 	return True
 
 stimuli = []
 for i in contours:
-	cv2.drawContours(image, i, -1, (0, 255, 0), 2)
+	#cv2.drawContours(image, i, -1, (0, 255, 0), 2)
 	if is_circle(i):
 		stimuli.append(i)
 		cv2.drawContours(image, i, -1, (0, 255, 0), 2)
@@ -54,14 +54,14 @@ print(len(stimuli))
 
 #cv2.imwrite("result.png", image)
 
-if len(stimuli) == 2:
-	img = image.astype(np.uint8)
+if len(stimuli) >= 2:
+	#img = image.astype(np.uint8)
 	x1,y1,w1,h1 = cv2.boundingRect(stimuli[0])
 	#print("first", cv2.boundingRect(stimuli[0]))
 	x2,y2,w2,h2 = cv2.boundingRect(stimuli[1])
 	#print("second", cv2.boundingRect(stimuli[1]))
-	mask1 = np.zeros_like(img[:2], dtype.uint8)
-	mask2 = np.zeros_like(img[:2], dtype.uint8)
+	mask1 = np.zeros_like(img, np.uint8)
+	mask2 = np.zeros_like(img, np.uint8)
 
     # Draw the contours on the masks
 	cv2.drawContours(mask1, [stimuli[0]], -1, color=255, thickness=cv2.FILLED)
