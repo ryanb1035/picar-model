@@ -42,9 +42,11 @@ def display_stimulus():
     value = random.randint(0,150)
     fill = '#%02x%02x%02x' % (value, value, value)
     left = C.create_oval(width/4-100, height/2-100, width/4+100, height/2+100, fill=fill) 
+    C.create_text(width/4, height/2, text="{val:.2f}".format(val = (150-value)/150), fill="white", font=("Helvetica 15 bold"))
 
     #creates a new circle with the generated value
     right = C.create_oval(width*3/4-100, height/2-100, width*3/4+100, height/2+100, fill='#4b4b4b')
+    C.create_text(width*3/4, height/2, text="0.50", fill="white", font=("Helvetica 15 bold"))
     C.pack()
 
     #print("The radius of the new circle is",value,"pixels")
