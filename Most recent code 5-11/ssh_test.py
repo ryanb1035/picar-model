@@ -1,5 +1,5 @@
 import time
-import paramiko
+import paramiko as ssh
 import stimuli
 from time import sleep
 
@@ -7,8 +7,8 @@ host = "192.168.0.5"
 username = "smlab-picar-dev"
 password = "2mysore1lab"
 
-client = paramiko.client.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client = ssh.client.SSHClient()
+client.set_missing_host_key_policy(ssh.AutoAddPolicy())
 #client.connect(host, username=username, password=password)
 
 def run_and_print(command):
