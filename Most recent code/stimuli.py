@@ -42,11 +42,11 @@ def display_stimulus():
     C.create_text(width*3/4, height/2, text="0.50", fill="white", font=("Helvetica 15 bold"))
     C.pack()
 
-def create_image_canvas():
-    # Create the main window
-    root = tkinter.Toplevel()
-    root.title("Image Display")
+# Create the main window
+root = tkinter.Toplevel()
+root.title("Image Display")
 
+def create_image_canvas():
     # Set the size of the window
     window_width = 800
     window_height = 600
@@ -81,5 +81,5 @@ def create_image_canvas():
     canvas.create_image(0, window_height // 2, anchor="nw", image=tk_image3)
 
 
-create_image_canvas()
-display_stimulus()
+#create_image_canvas()
+#display_stimulus()

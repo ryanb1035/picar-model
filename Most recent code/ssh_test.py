@@ -20,8 +20,10 @@ def run_and_print(command):
 for i in range(10):
     #run_and_print("cd Desktop//picar-dev//new_categorization//; python new_categorization.py")
     stimuli.display_stimulus()
+    stimuli.create_image_canvas()
     t_end = time.time() + 1
     while time.time() < t_end:
         stimuli.top.update()
+        stimuli.root.update()
 
 client.close()
