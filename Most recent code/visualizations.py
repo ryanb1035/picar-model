@@ -15,14 +15,14 @@ img2 = mpimg.imread(image_path2)
 img3 = mpimg.imread(image_path3)
 
 # Create a figure to hold the subplots
-fig = plt.figure()
+fig1 = plt.figure()
 
 # Add subplots
 # Two images on the top
-ax1 = fig.add_subplot(2, 2, 1)  # Row 1, Col 1
-ax2 = fig.add_subplot(2, 2, 2)  # Row 1, Col 2
+ax1 = fig1.add_subplot(2, 2, 1)  # Row 1, Col 1
+ax2 = fig1.add_subplot(2, 2, 2)  # Row 1, Col 2
 # One image on the bottom spanning both columns
-ax3 = fig.add_subplot(2, 1, 2)  # Row 2, Col span
+ax3 = fig1.add_subplot(2, 1, 2)  # Row 2, Col span
 
 # Display images
 ax1.imshow(img1)
