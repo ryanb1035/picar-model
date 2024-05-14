@@ -1,6 +1,7 @@
 from time import sleep
 import tkinter
 import random
+from PIL import Image
 
 #creating essential variables of the window, the height, and the width of the screen
 top = tkinter.Tk()
@@ -40,4 +41,7 @@ def display_stimulus():
     #creates a new circle with the generated value
     right = C.create_oval(width*3/4-100, height/2-100, width*3/4+100, height/2+100, fill='#4b4b4b')
     C.create_text(width*3/4, height/2, text="0.50", fill="white", font=("Helvetica 15 bold"))
+    C.postscript(file="C:\\Users\\rbohl\\Downloads\\Projects\\23-24\\picar-model\\Most recent code\\images\\stimuli.ps", colormode='color')
+    psimage=Image.open('C:\\Users\\rbohl\\Downloads\\Projects\\23-24\\picar-model\\Most recent code\\images\\stimuli.ps')
+    psimage.save('stimuli.png')
     C.pack()

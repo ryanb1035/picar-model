@@ -1,6 +1,7 @@
 import time
 import paramiko as ssh
 import stimuli
+#import visualizations
 from time import sleep
 
 host = "192.168.0.5"
